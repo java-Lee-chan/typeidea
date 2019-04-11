@@ -1,16 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>typeidea 博客系统</title>
-</head>
-<body>
-<div>顶部分类:
-    {% for cate in navs %}
-    <a href="/category/{{ cate.id }}/">{{ cate.name }}</a>
-    {% endfor %}
-</div>
-<hr/>
+{% extends "./base.html" %}
+{% block title %} {{ post.title }}{% endblock %}
+
+{% block main %}
     {% if post %}
     <h1>{{ post.title }}</h1>
     <div>
@@ -22,16 +13,4 @@
         {{ post.content }}
     </p>
     {% endif %}
-<div>底部分类:
-    {% for cate in categories %}
-    <a href="/category/{{ cate.id }}/">{{ cate.name }}</a>
-    {% endfor %}
-</div>s
-<div>侧边栏展示:
-    {% for sidebar in sidebars %}
-        <h4>{{ sidebar.title }}</h4>
-        {{ siedebar.content }}
-    {% endfor %}
-</div>
-</body>
-</html>
+{% endblock %}

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>侧边栏文章</title>
+</head>
+<body>
+    <ul>
+        {% for post in posts %}
+        <li><a href="{% url 'post-detail' post.id %}">{{ post.title }}</a></li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
