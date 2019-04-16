@@ -12,7 +12,7 @@ class Comment(models.Model):
         (STATUS_DELETE, '删除'),
     )
 
-    target = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name="评论目标")
+    target = models.CharField(max_length=100, verbose_name="评论目标")
     content = models.CharField(max_length=2000, verbose_name="内容")
     nickname = models.CharField(max_length=50, verbose_name="昵称")
     website = models.URLField(verbose_name="网站")
@@ -26,3 +26,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.target.title
+
+    @classmethod
+    def get_by_target(cls, target):
+        return cls.objects.filter(target=target, status=cls.STATUS_NORMAL)
