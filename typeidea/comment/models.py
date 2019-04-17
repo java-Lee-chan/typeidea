@@ -24,9 +24,6 @@ class Comment(models.Model):
     class Meta:
         verbose_name = verbose_name_plural = "评论"
 
-    def __str__(self):
-        return self.target.title
-
     @classmethod
     def get_by_target(cls, target):
         return cls.objects.filter(target=target, status=cls.STATUS_NORMAL)
