@@ -8,6 +8,8 @@
             shrink-to-fit=no">
         <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
         <style>
+        {% block extra-head %}
+        {% endblock %}
         .post {
             margin-bottom: 5px;
         }
