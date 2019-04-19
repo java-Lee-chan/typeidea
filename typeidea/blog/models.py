@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.functional import cached_property
 
 import mistune
 
@@ -86,7 +87,7 @@ class Post(models.Model):
     status = models.PositiveIntegerField(default=STATUS_NORMAL,
                                          choices=STATUS_ITEMS, verbose_name="状态")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="分类")
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, verbose_name="标签")
+    tag = models.ManyToManyField(Tag, verbose_name="标签")
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="作者")
     created_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     pv = models.PositiveIntegerField(default=1)
@@ -105,6 +106,7 @@ class Post(models.Model):
             tag = Tag.objects.get(id=tag_id)
         except Tag.DoesNotExist:
             tag = None
+            post_list = []
         else:
             post_list = tag.post_set.filter(status=Post.STATUS_NORMAL)\
                 .select_related('owner', 'category')
@@ -135,3 +137,8 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         self.content_html = mistune.markdown(self.content)
         super().save(*args, **kwargs)
+
+    @cached_property
+    def tags(self):
+        return ','.join(self.tag.values_list('name', flat=True))
+
