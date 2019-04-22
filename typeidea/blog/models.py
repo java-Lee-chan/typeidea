@@ -88,6 +88,7 @@ class Post(models.Model):
                                          choices=STATUS_ITEMS, verbose_name="状态")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="分类")
     tag = models.ManyToManyField(Tag, verbose_name="标签")
+    # is_md = models.BooleanField(default=False, verbose_name="markdown语法")
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="作者")
     created_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     pv = models.PositiveIntegerField(default=1)
@@ -135,7 +136,10 @@ class Post(models.Model):
         return cls.objects.filter(status=cls.STATUS_NORMAL).order_by('-pv')
 
     def save(self, *args, **kwargs):
+        # if self.is_md:
         self.content_html = mistune.markdown(self.content)
+        # else:
+        #     self.content_html = self.content
         super().save(*args, **kwargs)
 
     @cached_property
