@@ -18,8 +18,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps import views as sitemap_views
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from rest_framework.documentation import include_docs_urls
 
 # from blog.views import post_list, post_detail
+# from blog.apis import post_list, PostList
+from blog.apis import PostViewSet, CategoryViewSet
 from blog.views import (IndexView, CategoryView, TagView, PostDetailView, SearchView, AuthorView)
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
@@ -28,6 +32,9 @@ from config.views import LinkView
 from .autocomplete import CategoryAutocomplete, TagAutocomplete
 from .custom_site import custom_site
 
+router = DefaultRouter()
+router.register(r'post', PostViewSet, base_name='api-post')
+router.register(r'category', CategoryViewSet, base_name='api=category')
 
 urlpatterns = [
     # path('', post_list, name='index'),
@@ -47,6 +54,9 @@ urlpatterns = [
     path('category-autocomplete/', CategoryAutocomplete.as_view(), name='category-autocomplete'),
     path('tag-autocomplete/', TagAutocomplete.as_view(), name='tag-autocomplete'),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+    # path('api/post/', PostList.as_view(), name='post-list'),
+    path('api/', include(router.urls)),
+    path('api/docs/', include_docs_urls(title='typeidea apis')),
     path('super_admin/', admin.site.urls, name='super-admin'),
     path('admin/', custom_site.urls, name='admin'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
