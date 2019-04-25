@@ -103,7 +103,7 @@ class TagView(IndexView):
     def get_queryset(self):
         queryset = super().get_queryset()
         tag_id = self.kwargs.get('tag_id')
-        return queryset.filter(tag_id=tag_id)
+        return queryset.filter(tag__id=tag_id)
 
 
 class PostDetailView(CommonViewMixin, DetailView):
@@ -130,10 +130,10 @@ class PostDetailView(CommonViewMixin, DetailView):
 
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
-        self.handle_visted()
+        self.handle_visited()
         return response
 
-    def handle_visted(self):
+    def handle_visited(self):
         increase_pv = False
         increase_uv = False
         uid = self.request.uid
